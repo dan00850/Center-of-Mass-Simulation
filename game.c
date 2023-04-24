@@ -87,24 +87,16 @@ Windoww  Create_game(){
     }
     return a;
 };
-void Find_center_of_mass(int add,int x,int y, Windoww * window){
+void Find_center_of_mass(){
     //if add more block we will change the center by add the coordinate of the center of block int by the following fomular
     
-    if(add==1){
-        if (count_o>1){
-            center_x=(center_x*(count_o-1)+x)/count_o;
-            center_y=(center_y*(count_o-1)+y)/count_o;
+    if (count_o!=0){
+            center_x=center_x / count_o;
+            center_y=center_y / count_o;
+        }else{
+            center_x=0;
+            center_y=0;
         }
-    }
-    else if (add==0){
-        if(count_o>0){
-        center_x=(center_x*(count_o+1)-x)/count_o;
-        center_y=(center_y*(count_o+1)-y)/count_o;
-        }
-    }
-    
-    draw_circle(center_x,center_y, window,1);
-    
 };
 
 /*
@@ -302,13 +294,7 @@ void Take_input_from_user(Windoww * window){
                 }
             }
         }
-        if (count_o!=0){
-            center_x=center_x / count_o;
-            center_y=center_y / count_o;
-        }else{
-            center_x=0;
-            center_y=0;
-        }
+        Find_center_of_mass();
 
         // rotateSquare(window,x,y,112,112,0.3,0.954);
 
