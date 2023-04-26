@@ -157,6 +157,25 @@ void rotate(int cen_x,int cen_y,Windoww * window, double cos_alpha,double sin_al
     draw_circle(center_x1,center_y1,window,1);
     
 }
+void rotate1(int x,int y, Windoww * window){
+    double cos_alpha, sin_alpha;
+        double hypotenuse =sqrt((center_x-x)*(center_x-x)+(center_y-y)*(center_y-y));
+        sin_alpha= 1.0 * (x-center_x)/hypotenuse;
+        cos_alpha= 1.0 * (center_y-y)/hypotenuse;
+        double alpha = acos(cos_alpha);
+        if (alpha_change <50){
+            double alpha1= alpha-alpha*(50-alpha_change)/50;
+            double cos_alpha1=cos(alpha1);
+            double sin_alpha1=sin(alpha1);
+            if(center_x<x){
+                rotate(x,y,window,cos_alpha1,sin_alpha1);
+            } else{
+                rotate(x,y,window,cos_alpha1,-sin_alpha1);
+            }           
+        } else{
+            rotate(x,y,window,cos_alpha,sin_alpha);
+        }
+}
 
 // function to take input
 void Take_input_from_user(Windoww * window){
@@ -241,13 +260,8 @@ void Take_input_from_user(Windoww * window){
             }
         }
         //
-        if (count_o!=0){
-            center_x=center_x / count_o;
-            center_y=center_y / count_o;
-        }else{
-            center_x=0;
-            center_y=0;
-        }
+        Find_center_of_mass();
+
         draw_circle(center_x,center_y,window,1);
         draw_circle(nail_x,nail_y,window,2);
 
@@ -309,23 +323,9 @@ void Take_input_from_user(Windoww * window){
         // rotateSquare(window,x,y,112,112,0.3,0.954);
 
         // calculate the alpha angle that need to be rotated
-        double cos_alpha, sin_alpha;
-        double hypotenuse =sqrt((center_x-x)*(center_x-x)+(center_y-y)*(center_y-y));
-        sin_alpha= 1.0 * (x-center_x)/hypotenuse;
-        cos_alpha= 1.0 * (center_y-y)/hypotenuse;
-        double alpha = acos(cos_alpha);
-        if (alpha_change <50){
-            double alpha1= alpha-alpha*(50-alpha_change)/50;
-            double cos_alpha1=cos(alpha1);
-            double sin_alpha1=sin(alpha1);
-            if(center_x<x){
-                rotate(x,y,window,cos_alpha1,sin_alpha1);
-            } else{
-                rotate(x,y,window,cos_alpha1,-sin_alpha1);
-            }           
-        } else{
-            rotate(x,y,window,cos_alpha,sin_alpha);
-        }
+        if (x!=0 && y!=0){
+            rotate1(x,y,window);
+        }        
         // rotate the center
         draw_circle(re_load_x,re_load_y,window,4);
         draw_circle(center_x,center_y,window,1);
