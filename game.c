@@ -22,13 +22,6 @@ int re_load_x=780;
 int re_load_y=580;
 int check_reload=1;
 
-// struct Windoww{
-//     SDL_Window* window;
-//     SDL_Renderer* renderer;
-// };
-// typedef struct Windoww Windoww;
-
-
 //function to determine the center of mass ();
 bool check_reload1(){
     return (check_reload=1);
@@ -167,22 +160,29 @@ void rotate(int cen_x,int cen_y,Windoww * window, double cos_alpha,double sin_al
 
 // function to take input
 void Take_input_from_user(Windoww * window){
-    count_o=0;
-    int x,y;
+    count_o=0; //set number of square on the screen to 0
+    int x,y; // variables to store the x and y coordinates of the mouse click
     SDL_Event event;
     int running = 1;
-    
+   
+    // Set the render draw color to white and clear the screen
     SDL_SetRenderDrawColor(window->renderer,255,255,255,255);
     SDL_RenderClear(window->renderer);
+    
+    // set reload to 0
     check_reload=0;
+    
+    // Run a loop to take input from the user until the user quits the program
     while (running) {
-        
+        // Run a loop to handle all events
         while (SDL_PollEvent(&event)) {
-            check_click_nail=0;
+            check_click_nail=0; 
             switch (event.type) {
+                // If the user clicks on the close window button
                 case SDL_QUIT:
                     running = 0;
                     break;
+                // If the user clicks on the close window button
                 case SDL_MOUSEBUTTONDOWN:
                 //x and y is coordinate of mouse click and divide  by the "SQUARE_SIZE "to find the grid which will be displayed 
                     
@@ -190,21 +190,23 @@ void Take_input_from_user(Windoww * window){
                     y = event.button.y ;
                     // if the user click on the nail
                     if((nail_x-10<x) && (x<nail_x+10) && (nail_y-10 < y)&&(y < nail_y +10)){
-
+                         // Set the check click nail variable to true
                         check_click_nail=1;
                         break;
 
                     }
-                    
+                    // Divide the x and y coordinates by the SQUARE_SIZE to get the grid which will be displayed
                     x = x / SQUARE_SIZE;
                     y = y / SQUARE_SIZE;
+                    // If the square is empty
                     if(matrix[y][x] ==0){
-                        matrix[y][x] = 1;     
-                        count_o++;  
+                        matrix[y][x] = 1; // Mark the square as filled
+                        count_o++;  //number of square increase by 1
                     }  
+                    // If the square is already filled
                     else{
-                        matrix[y][x] = 0;
-                        count_o--;
+                        matrix[y][x] = 0; // Mark the square as empty
+                        count_o--; // number of square decrease by 1
                         printf("centerx : %d \n", center_x);
                         printf("center_y: %d \n", center_y);
                     }        
@@ -214,26 +216,31 @@ void Take_input_from_user(Windoww * window){
             }
         
         }
+        // Reset the center_x and center_y variables
         center_x=0;
         center_y=0;
         for (int y = 0; y <24; y++) {
             for (int x = 0; x < 32; x++) {
+                // If the square is filled
                 if (matrix[y][x]) {
-                    
+                    // Calculate the center of mass of the filled squares
                     center_x=center_x+x*SQUARE_SIZE+13;
                     center_y=center_y+y*SQUARE_SIZE+13;
-                    
+                    // Draw a filled rectangle to represent the filled square
                     SDL_Rect rect = { x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
                 }
+                // If the square is empty
                 else {
+                    // Draw a filled rectangle to represent the filled square
                     SDL_Rect rect = { x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 200, 200, 200, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
                 }
             }
         }
+        //
         if (count_o!=0){
             center_x=center_x / count_o;
             center_y=center_y / count_o;
