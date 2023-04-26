@@ -177,6 +177,9 @@ void rotate1(int x,int y, Windoww * window){
         }
 }
 
+void Drop_the_object(Windoww *window){
+    
+}
 // function to take input
 void Take_input_from_user(Windoww * window){
     count_o=0; //set number of square on the screen to 0
