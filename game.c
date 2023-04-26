@@ -255,6 +255,7 @@ void action(int x ,int y,Windoww * window){
 void Take_input_from_user(Windoww * window){
     count_o=0; //set number of square on the screen to 0
     int x,y; // variables to store the x and y coordinates of the mouse click
+
     SDL_Event event;
     int running = 1;
    
@@ -269,6 +270,7 @@ void Take_input_from_user(Windoww * window){
     while (running) {
         // Run a loop to handle all events
         while (SDL_PollEvent(&event)) {
+            /*change check_click_nail to be 0 (mean do not click into the nail)*/
             check_click_nail=0; 
             switch (event.type) {
                 // If the user clicks on the close window button
@@ -291,14 +293,14 @@ void Take_input_from_user(Windoww * window){
                     // Divide the x and y coordinates by the SQUARE_SIZE to get the grid which will be displayed
                     x = x / SQUARE_SIZE;
                     y = y / SQUARE_SIZE;
-                    // If the square is empty
+                    // If the square is not displayed -> display the square and increase the number of displayed grid by 1 .
                     if(matrix[y][x] ==0){
-                        matrix[y][x] = 1; // Mark the square as filled
+                        matrix[y][x] = 1; 
                         count_o++;  //number of square increase by 1
                     }  
-                    // If the square is already filled
-                    else{
-                        matrix[y][x] = 0; // Mark the square as empty
+                    // If the square is already displayed -> turn off it and decrease the number of displayed grid by 1
+                    else{ 
+                        matrix[y][x] = 0; 
                         count_o--; // number of square decrease by 1
                         printf("centerx : %d \n", center_x);
                         printf("center_y: %d \n", center_y);
@@ -309,17 +311,17 @@ void Take_input_from_user(Windoww * window){
             }
         
         }
-        // Reset the center_x and center_y variables
+        // Reset the center_x and center_y variables to calculate the center of  the object
         center_x=0;
         center_y=0;
         for (int y = 0; y <24; y++) {
             for (int x = 0; x < 32; x++) {
-                // If the square is filled
-                if (matrix[y][x]) {
-                    // Calculate the center of mass of the filled squares
+                // If the square is displayed
+                if (matrix[y][x]==1) {
+                    // Calculate the total value of squares's center
                     center_x=center_x+x*SQUARE_SIZE+13;
                     center_y=center_y+y*SQUARE_SIZE+13;
-                    // Draw a filled rectangle to represent the filled square
+                    // Draw a filled rectangle to display square
                     SDL_Rect rect = { x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
@@ -335,10 +337,10 @@ void Take_input_from_user(Windoww * window){
         }
         //
         Find_center_of_mass();
-
+        /*Draw the center of the center and nail botton*/
         draw_circle(center_x,center_y,window,1);
         draw_circle(nail_x,nail_y,window,2);
-
+        /*display all in the window*/
         SDL_RenderPresent(window->renderer);
         
         // IN the case click in to the nail
@@ -346,23 +348,24 @@ void Take_input_from_user(Windoww * window){
             break;
         } 
     }
-    running=1;
+    /* Reset the click location to zero*/
     x=0;
     y=0;
-    while (running){
-        while (SDL_PollEvent(&event)) {
-            
+    while (true){
+        // Run a loop to handle all events
+        while (SDL_PollEvent(&event)) {        
             switch (event.type) {
                 case SDL_QUIT:
                     running = 0;
                     break;
                 case SDL_MOUSEBUTTONDOWN:
-                //x and y is coordinate of mouse click and divide  by the "SQUARE_SIZE "to find the grid which will be displayed 
-                    
+                    //x and y is coordinate of mouse click and divide  by the "SQUARE_SIZE "to find the grid which will be displayed                     
                     x = event.button.x ;
                     y = event.button.y ;
+                    /*Reset alpha_change and drop_change to zero to if user click mouse so computer can use it to rotate or drop the object*/
                     alpha_change=0;
                     drop_change=0;
+                    /* if user click on reload botton-> reload all program*/
                     if((re_load_x-10<x) && (x<re_load_x+10) && (re_load_y-10 < y)&&(y < re_load_y +10)){
                         check_reload=1;
                         
@@ -370,11 +373,12 @@ void Take_input_from_user(Windoww * window){
             }
         }
         if(check_reload==1){
-            break;
+            break;//Break to reload all the program
         }
-        // printf("x,y : %d %d \n",x,y);
+        // Reset the center_x and center_y variables to calculate the center of  the object
         center_x=0;
         center_y=0;
+
         for (int y = 0; y <24; y++) {
             for (int x = 0; x < 32; x++) {
                 if (matrix[y][x]) {
@@ -393,23 +397,27 @@ void Take_input_from_user(Windoww * window){
                 }
             }
         }
+        /*find center of the object*/
         Find_center_of_mass();
 
         // rotateSquare(window,x,y,112,112,0.3,0.954);
 
-        // calculate the alpha angle that need to be rotated
+        // if user click on the botton ->take action(rotate or drop)
         if (x!=0 && y!=0){
             action(x,y,window);
         }        
-        // rotate the center
+        // Draw reload botton, center of object, and the nail
         draw_circle(re_load_x,re_load_y,window,4);
         draw_circle(center_x,center_y,window,1);
         draw_circle(x,y,window,2);
+        /*delay the displayed window in 20ms*/
         SDL_Delay(20);
         SDL_RenderPresent(window->renderer);
+        /*increase the change of alpha and  the change of drop (the two have function as time quantity)*/
         alpha_change++;
         drop_change++;
     }   
+    /*Reset all Square before quit the window*/
     for(int y=0; y<24;y++){
         for(int x=0;x<32; x++){  
             matrix[y][x]=0;
