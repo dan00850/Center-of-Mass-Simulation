@@ -18,9 +18,11 @@ int check_click_nail=0;
 int count_o=0;
 int matrix[24][32];// Define a matrix which is used to determine which block will be lighted
 int alpha_change=0;
+int drop_change =0;
 int re_load_x=780;
 int re_load_y=580;
 int check_reload=1;
+
 
 //function to determine the center of mass ();
 bool check_reload1(){
@@ -177,8 +179,55 @@ void rotate1(int x,int y, Windoww * window){
         }
 }
 
-void Drop_the_object(Windoww *window){
+void Drop_the_object(Windoww * window,int drop_change){
+  
+    int Delta_y=drop_change*drop_change/2;
+   
+    // int check_touch_layer=0;
     
+    for(int j=0; j<24; j++){
+        for(int k=31; k>=0; k--){
+            
+            if(matrix[j][k]==1){
+                if (j* SQUARE_SIZE +Delta_y >600){
+                    SDL_Rect rect = { k * SQUARE_SIZE, 600-SQUARE_SIZE-1, SQUARE_SIZE, SQUARE_SIZE };
+                    SDL_SetRenderDrawColor(window->renderer, 200, 200, 200, 255);
+                    SDL_RenderFillRect(window->renderer, &rect);
+                   
+                    // check_touch_layer=1;
+                    break;
+                } else{
+                    SDL_Rect rect = { k * SQUARE_SIZE, j * SQUARE_SIZE + Delta_y, SQUARE_SIZE, SQUARE_SIZE };
+                    SDL_SetRenderDrawColor(window->renderer, 0, 255, 0, 255);
+                    SDL_RenderFillRect(window->renderer, &rect);
+                  
+                }            
+            }
+        }
+    }          
+};
+void action(int x ,int y,Windoww * window){
+    int chec_action=0;
+    for(int i=0; i<24; i++){
+        for (int j=0; j<32; j++){
+            if(matrix[i][j]==1){
+            if (i*SQUARE_SIZE <= y    && 
+                (i+1)*SQUARE_SIZE > y && 
+                j*SQUARE_SIZE <= x    && 
+                (j+1)*SQUARE_SIZE >x   ){
+                    chec_action=1;
+                    
+                    break;
+                }
+        }}
+            
+        if(chec_action==1) break;
+    }
+    if(chec_action==1){
+        rotate1( x, y, window);
+    } else {
+        Drop_the_object(window,drop_change);
+    }
 }
 // function to take input
 void Take_input_from_user(Windoww * window){
@@ -291,6 +340,7 @@ void Take_input_from_user(Windoww * window){
                     x = event.button.x ;
                     y = event.button.y ;
                     alpha_change=0;
+                    drop_change=0;
                     if((re_load_x-10<x) && (x<re_load_x+10) && (re_load_y-10 < y)&&(y < re_load_y +10)){
                         check_reload=1;
                         
@@ -327,7 +377,7 @@ void Take_input_from_user(Windoww * window){
 
         // calculate the alpha angle that need to be rotated
         if (x!=0 && y!=0){
-            rotate1(x,y,window);
+            action(x,y,window);
         }        
         // rotate the center
         draw_circle(re_load_x,re_load_y,window,4);
@@ -336,6 +386,7 @@ void Take_input_from_user(Windoww * window){
         SDL_Delay(20);
         SDL_RenderPresent(window->renderer);
         alpha_change++;
+        drop_change++;
     }   
     for(int y=0; y<24;y++){
         for(int x=0;x<32; x++){  
