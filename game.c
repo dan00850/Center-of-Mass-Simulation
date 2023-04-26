@@ -134,14 +134,11 @@ void rotateSquare(Windoww *window, int x ,int y,int cen_x,int cen_y ,double cos_
 This function will rotate the system
 int cen_x : the coordinate x of the axist
 int cen_y : the coordinate y of the axist
+double cos_alpha : the value of cos() of alpha angle
+double sin_alpha  : the value of sin() of the alpha angle
 */
 void rotate(int cen_x,int cen_y,Windoww * window, double cos_alpha,double sin_alpha){
-   
-    /*Calculate cos alpha and sin(alpha) that need to be rotate*/
-    // double cos_alpha, sin_alpha;
-    // double hypotenuse =sqrt((center_x-cen_x)*(center_x-cen_x)+(center_y-cen_y)*(center_y-cen_y));
-    // sin_alpha= 1.0 * (cen_x-center_x)/hypotenuse;
-    // cos_alpha= 1.0 * (center_y-cen_y)/hypotenuse;
+    // 
     for (int i=0; i<24; i++){
         for(int j=0; j<32; j++){
             if (matrix[i][j]==1){
@@ -149,7 +146,7 @@ void rotate(int cen_x,int cen_y,Windoww * window, double cos_alpha,double sin_al
             }
         }
     }
-    // rotate the center:
+    // rotate the center by using transfomation linear:
     int center_x2= center_x-cen_x;
     int center_y2= center_y-cen_y;
     int center_x1 = round(center_x2 * cos_alpha + center_y2 * sin_alpha);
