@@ -62,27 +62,37 @@ void draw_circle(int x, int y, Windoww * window, int color){
 //function which is used to delete the old center of mass
 
 
-// function to create a game
-Windoww  Create_game(){
+// Define a function called "Create_game()" that returns a variable of type "Windoww"
+Windoww Create_game(){
+    // Declare a variable "a" of type "Windoww"
     Windoww a;    
+
+    // Initialize the SDL video subsystem
     if(SDL_Init(SDL_INIT_VIDEO)!=0){
+        // If an error occurred, print the error message and exit the program
         SDL_GetError( );
         exit(EXIT_FAILURE);
     }
 
+    // Create a window called "My game" with the specified width and height, and show it on screen
     a.window=SDL_CreateWindow("My game", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_SHOWN);
     if(NULL==a.window){
+        // If an error occurred, print the error message and exit the program
         printf("could not create window\n");
         SDL_GetError( );       
         exit(EXIT_FAILURE);
     }
 
+    // Create a renderer for the window
     a.renderer = SDL_CreateRenderer(a.window, -1, 0);
     if(NULL == a.renderer){
+        // If an error occurred, print the error message and exit the program
         printf("could not create window\n");
         SDL_GetError( ); 
         exit(EXIT_FAILURE);
     }
+
+    // Return the "a" variable containing the window and renderer
     return a;
 };
 void Find_center_of_mass(){
