@@ -123,7 +123,7 @@ void rotateSquare(Windoww *window, int x ,int y,int cen_x,int cen_y ,double cos_
             /*Move the point to the expected place*/
             newX += x;
             newY += y;
-
+            /*light the pixel*/
             SDL_SetRenderDrawColor(window->renderer, 0, 255, 0, 255);
             SDL_RenderDrawPoint(window->renderer, newX, newY);
         }
@@ -156,44 +156,61 @@ void rotate(int cen_x,int cen_y,Windoww * window, double cos_alpha,double sin_al
     draw_circle(center_x1,center_y1,window,1);
     
 }
-void rotate1(int x,int y, Windoww * window){
-    double cos_alpha, sin_alpha;
-        double hypotenuse =sqrt((center_x-x)*(center_x-x)+(center_y-y)*(center_y-y));
-        sin_alpha= 1.0 * (x-center_x)/hypotenuse;
-        cos_alpha= 1.0 * (center_y-y)/hypotenuse;
-        double alpha = acos(cos_alpha);
-        if (alpha_change <50){
-            double alpha1= alpha-alpha*(50-alpha_change)/50;
-            double cos_alpha1=cos(alpha1);
-            double sin_alpha1=sin(alpha1);
-            if(center_x<x){
-                rotate(x,y,window,cos_alpha1,sin_alpha1);
-            } else{
-                rotate(x,y,window,cos_alpha1,-sin_alpha1);
-            }           
-        } else{
-            rotate(x,y,window,cos_alpha,sin_alpha);
-        }
-}
-
-void Drop_the_object(Windoww * window,int drop_change){
-  
-    int Delta_y=drop_change*drop_change/2;
-   
-    // int check_touch_layer=0;
+/* 
+The function have 3 parameter :
+int x: the x coordinate of the nail
+int y : the y coordinate of the nail
+window the pointer to the address of a window*/
+void SmoothRotate(int x,int y, Windoww * window){
     
+    /*Calculate the final alpha angle that the created object will approach to*/
+    double cos_alpha, sin_alpha;
+    double hypotenuse =sqrt((center_x-x)*(center_x-x)+(center_y-y)*(center_y-y));
+    sin_alpha= 1.0 * (x-center_x)/hypotenuse;
+    cos_alpha= 1.0 * (center_y-y)/hypotenuse;
+    double alpha = acos(cos_alpha);
+
+    /*alpha_change is grobal variable which is used to calculate the gradual changing of
+     angle of the object when it rotate it can be considered as the time quantity in physis
+     The condition alpha_change make sure the angle do not exceeding the expected place*/
+    if (alpha_change* alpha_change <250){
+        /* calculate the gradual chaning of the angle*/
+        double alpha1= alpha-alpha*(250-alpha_change* alpha_change)/250;
+        double cos_alpha1=cos(alpha1);
+        double sin_alpha1=sin(alpha1);
+
+        /*If the center of the object  on the left of the  nail -> rotate clockwise other wise turn back clockwise*/
+        if(center_x<x){
+            rotate(x,y,window,cos_alpha1,sin_alpha1);
+        } else{
+            rotate(x,y,window,cos_alpha1,-sin_alpha1);
+        }           
+    }/* In the case the alpha_change exeeding the limit , just show a expected place of the object on the window*/ 
+    else{
+        rotate(x,y,window,cos_alpha,sin_alpha);
+    }
+}
+/*
+The function will drop the object 
+THe function have 2 parameters:
+window the pointer to the address of a window
+int drop_change : can be consider as time quantity in physic */
+void Drop_the_object(Windoww * window,int drop_change){
+    /* calculate the change distance follow by y axit , drop_change can be considered as time quatity*/
+    int Delta_y=drop_change*drop_change/2;  
+
+    /*check if the square is lighted, we will drop it */
     for(int j=0; j<24; j++){
         for(int k=31; k>=0; k--){
-            
             if(matrix[j][k]==1){
+                /* if the value y coordinate exceeding the the width of the window ,show it by same color with the color of the window*/
                 if (j* SQUARE_SIZE +Delta_y >600){
                     SDL_Rect rect = { k * SQUARE_SIZE, 600-SQUARE_SIZE-1, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 200, 200, 200, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
-                   
-                    // check_touch_layer=1;
-                    break;
-                } else{
+                
+                } /*show the object in changed place*/
+                else{
                     SDL_Rect rect = { k * SQUARE_SIZE, j * SQUARE_SIZE + Delta_y, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 0, 255, 0, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
@@ -203,8 +220,15 @@ void Drop_the_object(Windoww * window,int drop_change){
         }
     }          
 };
+
+/*This function will take action base on the location of the nail
+3 parameter:
+int x : x coordinate of the nail
+int y : y coordinate of the nail
+window the pointer to the address of the window*/
 void action(int x ,int y,Windoww * window){
     int chec_action=0;
+    /*Check if the nail is attached on the object*/
     for(int i=0; i<24; i++){
         for (int j=0; j<32; j++){
             if(matrix[i][j]==1){
@@ -220,8 +244,9 @@ void action(int x ,int y,Windoww * window){
             
         if(chec_action==1) break;
     }
+    /*if nail is attached on the object -> rotate it, otherwise drop it*/
     if(chec_action==1){
-        rotate1( x, y, window);
+        SmoothRotate( x, y, window);
     } else {
         Drop_the_object(window,drop_change);
     }
