@@ -33,33 +33,36 @@ int check_reload=1;
 bool check_reload1(){
     return (check_reload=1);
 }
-void draw_circle(int x, int y,Windoww * window,int color){
-    // red :1 , blue :2;
-    
+// Define a function to draw a circle at a given point on a window
+void draw_circle(int x, int y, Windoww * window, int color){
+    // Define the color to be used for rendering the circle
     if (color==1){
-        SDL_SetRenderDrawColor(window->renderer, 255, 0, 0, 255); 
+        SDL_SetRenderDrawColor(window->renderer, 255, 0, 0, 255); // Red
     } else if(color==2){
-        SDL_SetRenderDrawColor(window->renderer, 0, 0, 255, 255); 
+        SDL_SetRenderDrawColor(window->renderer, 0, 0, 255, 255); // Blue
     } else if(color==3){
-        SDL_SetRenderDrawColor(window->renderer, 0, 255, 0, 255);
+        SDL_SetRenderDrawColor(window->renderer, 0, 255, 0, 255); // Green
     } else if(color==4){
-        SDL_SetRenderDrawColor(window->renderer, 255, 255, 0, 255);
+        SDL_SetRenderDrawColor(window->renderer, 255, 255, 0, 255); // Yellow
     } else {
-        SDL_SetRenderDrawColor(window->renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(window->renderer, 255, 255, 255, 255); // White
     }
     
-    for( int i=x-8;i<=x+8; i++){
-        
-        for(int j=y-8; j<=y+8; j++){
-            if(i>0 && i <800 && j >0 && j< 600){
-                int a=sqrt((i-x)*(i-x)+(j-y)*(j-y));
-                if(a<=8){            
-                    SDL_RenderDrawPoint(window->renderer, i, j);}
-            
+    // Loop over all points within a square of 17x17 pixels around the center point
+    for (int i = x - 8; i <= x + 8; i++){
+        for (int j = y - 8; j <= y + 8; j++){
+            // Check that the current point is within the window's bounds
+            if (i > 0 && i < 800 && j > 0 && j < 600){
+                // Calculate the distance from the current point to the center point
+                int a = sqrt((i - x) * (i - x) + (j - y) * (j - y));
+                // If the distance is less than or equal to 8 (the circle radius), draw a pixel at the current point
+                if (a <= 8){
+                    SDL_RenderDrawPoint(window->renderer, i, j);
+                }
             }
         }
     }
-};
+}
 
 //function which is used to delete the old center of mass
 
