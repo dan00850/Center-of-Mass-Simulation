@@ -140,7 +140,7 @@ void rotateSquare(Windoww *window, int x ,int y,int cen_x,int cen_y ,double cos_
    
 }   
 /*
-This function will rotate the system
+This function will rotate the object an alpha angle
 int cen_x : the coordinate x of the axist
 int cen_y : the coordinate y of the axist
 double cos_alpha : the value of cos() of alpha angle
@@ -165,7 +165,7 @@ void rotate(int cen_x,int cen_y,Windoww * window, double cos_alpha,double sin_al
     draw_circle(center_x1,center_y1,window,1);
     
 }
-/* 
+/* The function will rotate the object physically
 The function have 3 parameter :
 int x: the x coordinate of the nail
 int y : the y coordinate of the nail
@@ -218,7 +218,7 @@ void Drop_the_object(Windoww * window,int drop_change){
                     SDL_SetRenderDrawColor(window->renderer, 200, 200, 200, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
                 
-                } /*show the object in changed place*/
+                } /*other wise show the object in changed place*/
                 else{
                     SDL_Rect rect = { k * SQUARE_SIZE, j * SQUARE_SIZE + Delta_y, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 0, 255, 0, 255);
@@ -335,9 +335,9 @@ void Take_input_from_user(Windoww * window){
                     SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
                 }
-                // If the square is empty
+                // If the square is not displayed
                 else {
-                    // Draw a filled rectangle to represent the filled square
+                    // Draw a rectangle whose color is same with the background
                     SDL_Rect rect = { x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 200, 200, 200, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
@@ -390,16 +390,19 @@ void Take_input_from_user(Windoww * window){
 
         for (int y = 0; y <24; y++) {
             for (int x = 0; x < 32; x++) {
+                // If the square is displayed
                 if (matrix[y][x]) {
-                    
+                    // Calculate the total value of squares's center
                     center_x=center_x+x*SQUARE_SIZE+13;
                     center_y=center_y+y*SQUARE_SIZE+13;
-                    
+                    // Draw a filled rectangle to display square
                     SDL_Rect rect = { x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 0, 0, 0, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
                 }
+                // If the square is not displayed
                 else {
+                    // Draw a rectangle whose color is same with the background
                     SDL_Rect rect = { x * SQUARE_SIZE, y * SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE };
                     SDL_SetRenderDrawColor(window->renderer, 200, 200, 200, 255);
                     SDL_RenderFillRect(window->renderer, &rect);
@@ -420,7 +423,7 @@ void Take_input_from_user(Windoww * window){
         draw_circle(center_x,center_y,window,1);
         draw_circle(x,y,window,2);
         /*delay the displayed window in 20ms*/
-        SDL_Delay(20);
+        SDL_Delay(30);
         SDL_RenderPresent(window->renderer);
         /*increase the change of alpha and  the change of drop (the two have function as time quantity)*/
         alpha_change++;
