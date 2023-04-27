@@ -9,18 +9,19 @@
 #define GRID_SIZE 25
 #define SQUARE_SIZE (WIDTH / GRID_SIZE)
 
-int center_x=0;
-int center_y=0;
-int nail_x=780;
-int nail_y=20;
-int check_click_nail=0;
-int count_o=0;
-int matrix[24][32];// Define a matrix which is used to determine which block will be lighted
-int alpha_change=0;
-int drop_change =0;
-int re_load_x=780;
-int re_load_y=580;
-int check_reload=1;
+int center_x=0;         // x-coordinate of the center point
+int center_y=0;         // y-coordinate of the center point
+int nail_x=780;         // x-coordinate of the nail
+int nail_y=20;          // y-coordinate of the nail
+int check_click_nail=0; // a flag to indicate whether the nail has been clicked or not
+int count_o=0;          // a counter variable used for count the number of the block which will be displayed
+int matrix[24][32];     // a 2D array used to determine which block will be displayed
+int alpha_change=0;     // a variable used to change the alpha value of something
+int drop_change =0;     // a variable used to change the drop value of something
+int re_load_x=780;      // x-coordinate of the reload button
+int re_load_y=580;      // y-coordinate of the reload button
+int check_reload=1;     // a flag to indicate whether the reload button has been clicked or not
+
 
 // This function checks if the file "center.txt" exists or not.
 // It tries to open the file in read mode and returns true if the file
@@ -34,7 +35,11 @@ bool fileExists() {
     }
     return false;
 }
-/*Write the center of the object into the center.txt file*/
+/*Write the center of the object into the center.txt file
+The function has two parameter:
+int x : the x coordinate of the center of the object
+int y : the y coordinate of the center of the object
+*/
 void Center_of_the_object(int x, int y){
     FILE *file = fopen("center.txt", "w");
     fprintf(file, "Center_y : %d .\n", center_y);
