@@ -30,15 +30,6 @@ void rotateSquare(Windoww *window, int x ,int y,int cen_x,int cen_y ,double cos_
 /*Function rotate an alpha angle the object around the cen_x, cen_y axit*/
 void rotate(int cen_x,int cen_y,Windoww * window, double cos_alpha,double sin_alpha);
 
-/*Function rotate the object physically*/
-void SmoothRotate(int x,int y, Windoww * window);
-
-/*Function drop the object if the nail does not pin to the object*/
-void Drop_the_object(Windoww * window,int drop_change);
-
-/*Function make action based on user's action*/
-void action(int x ,int y,Windoww * window);
-
 /*Function take input from user*/
 void Take_input_from_user(Windoww * window);
 
