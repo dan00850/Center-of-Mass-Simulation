@@ -2,7 +2,7 @@
 #include<stdio.h>
 #include<SDL2/SDL.h>
 #include <stdio.h>
-//hello world
+
 int SDL_main(int argc, char *argv[]){
     while(check_reload1()){
 
