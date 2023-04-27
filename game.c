@@ -23,25 +23,25 @@ int re_load_y=580;      // y-coordinate of the reload button
 int check_reload=1;     // a flag to indicate whether the reload button has been clicked or not
 
 
-// This function checks if the file "center.txt" exists or not.
+// This function checks if the file "center.out" exists or not.
 // It tries to open the file in read mode and returns true if the file
 // is successfully opened and closed, indicating that the file exists.
 // Otherwise, it returns false.
 bool fileExists() {
-    FILE *file = fopen("center.txt", "r");
+    FILE *file = fopen("center.out", "r");
     if (file) {
         fclose(file);
         return true;
     }
     return false;
 }
-/*Write the center of the object into the center.txt file
+/*Write the center of the object into the center.out file
 The function has two parameter:
 int x : the x coordinate of the center of the object
 int y : the y coordinate of the center of the object
 */
 void Center_of_the_object(int x, int y){
-    FILE *file = fopen("center.txt", "w");
+    FILE *file = fopen("center.out", "w");
     fprintf(file, "Center_y : %d .\n", center_y);
     fprintf(file, "Center_x : %d .\n", center_x);
     fclose(file);
