@@ -1,8 +1,5 @@
-# Specifies the compiler to be used
 CC = g++
 
-# Specifies the compiler flags, including the include directory, library directory,
-# compiler warnings, and debugging information
 CFLAGS = -I src/include -L src/lib -Wall -g
 
 # Specifies the libraries to be linked, including the SDL2 libraries
