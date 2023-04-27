@@ -311,8 +311,6 @@ void Take_input_from_user(Windoww * window){
                     else{ 
                         matrix[y][x] = 0; 
                         count_o--; // number of square decrease by 1
-                        printf("centerx : %d \n", center_x);
-                        printf("center_y: %d \n", center_y);
                     }        
                     break;
                 default:
