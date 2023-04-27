@@ -22,7 +22,25 @@ int re_load_x=780;
 int re_load_y=580;
 int check_reload=1;
 
-
+// This function checks if the file "center.txt" exists or not.
+// It tries to open the file in read mode and returns true if the file
+// is successfully opened and closed, indicating that the file exists.
+// Otherwise, it returns false.
+bool fileExists() {
+    FILE *file = fopen("center.txt", "r");
+    if (file) {
+        fclose(file);
+        return true;
+    }
+    return false;
+}
+/*Write the center of the object into the center.txt file*/
+void Center_of_the_object(int x, int y){
+    FILE *file = fopen("center.txt", "w");
+    fprintf(file, "Center_y : %d .\n", center_y);
+    fprintf(file, "Center_x : %d .\n", center_x);
+    fclose(file);
+}
 //function to determine the center of mass ();
 bool check_reload1(){
     return (check_reload=1);
@@ -354,6 +372,8 @@ void Take_input_from_user(Windoww * window){
         if (check_click_nail==1){
             break;
         } 
+        /*write the value of center of the object into the file*/
+        Center_of_the_object(center_x,center_y);
     }
     /* Reset the click location to zero*/
     x=0;
@@ -409,8 +429,8 @@ void Take_input_from_user(Windoww * window){
         }
         /*find center of the object*/
         Find_center_of_mass();
-
-        // rotateSquare(window,x,y,112,112,0.3,0.954);
+        /*write the value of center of the object into the file*/
+        Center_of_the_object(center_x,center_y);
 
         // if user click on the botton ->take action(rotate or drop)
         if (x!=0 && y!=0){
